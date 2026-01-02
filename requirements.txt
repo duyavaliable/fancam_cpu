@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+ultralytics
+opencv-python
+ffmpeg-python
+numpy
+python-multipart
