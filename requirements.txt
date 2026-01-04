@@ -5,7 +5,7 @@ opencv-python
 ffmpeg-python
 numpy
 python-multipart
-moviepy
+moviepy==1.0.3
 tensorflow
 deepface
 flask
