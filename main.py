@@ -5,7 +5,7 @@ import os
 import datetime
 # from deepface import DeepFace
 from numpy.linalg import norm
-from moviepy.editor import VideoFileClip, AudioFileClip 
+from moviepy.editor import VideoFileClip, AudioFileClip
 import time
 import torch
 import gc
