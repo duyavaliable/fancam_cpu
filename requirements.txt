@@ -5,3 +5,7 @@ opencv-python
 ffmpeg-python
 numpy
 python-multipart
+moviepy
+tensorflow
+deepface
+flask

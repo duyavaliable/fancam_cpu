@@ -1,11 +1,12 @@
 from flask import Flask, request, jsonify, send_file, send_from_directory
 import os
+import base64
 from main import initial_detection, process_fancam, model, DEVICE_STR
 import time
 
 app = Flask(__name__, static_folder='.', static_url_path='')
 
-# ✅ DISABLE CACHING CHO TẤT CẢ STATIC FILES
+# DISABLE CACHING CHO TẤT CẢ STATIC FILES
 @app.after_request
 def add_no_cache_headers(response):
     if request.path.endswith(('.html', '.css', '.js')):
@@ -14,15 +15,15 @@ def add_no_cache_headers(response):
         response.headers['Expires'] = '-1'
     return response
 
-# ✅ ROUTE CHO INDEX.HTML VỚI CACHE BUSTING
+# ROUTE CHO INDEX.HTML VỚI CACHE BUSTING
 @app.route('/')
 def index():
-    return send_file('fancam_ui.html', cache_timeout=0)
+    return send_file('fancam_ui.html')
 
-# ✅ STATIC FILES VỚI CACHE BUSTING
+# STATIC FILES VỚI CACHE BUSTING
 @app.route('/<path:filename>')
 def static_files(filename):
-    return send_from_directory('.', filename, cache_timeout=0)
+    return send_from_directory('.', filename)
 
 # ============================================
 # API: DETECT PEOPLE IN VIDEO

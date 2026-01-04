@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+*.venv
+venv*/
+env*/
+.venv/
+venv/
+ENV/
+env/
+*.sqlite3
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# VSCode
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Model weights
+*.pt
+
+# Logs
+*.log
+
+# Temporary files
+temp_*
+flagged/
+*.avi
+*.mp4
+
+# MoviePy cache
+moviepy_temp*
+
+# Output
+/output/

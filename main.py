@@ -11,7 +11,7 @@ import torch
 import gc
 import tensorflow as tf
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'false'
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Tắt log TF thừa
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
 # gpus = tf.config.experimental.list_physical_devices('GPU')
