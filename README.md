@@ -4,12 +4,12 @@
 
 ## 📋 Tính năng
 
-- 🎯 **Auto Tracking**: Tự động phát hiện và theo dõi người được chọn trong video
-- 🤖 **Face Recognition**: Nhận diện khuôn mặt bằng deep learning
-- 🎨 **Color Matching**: So sánh màu trang phục để tăng độ chính xác
-- 🔍 **Smart Zoom**: Tự động zoom và crop theo tỷ lệ 9:16 (vertical video)
-- ⚡ **CPU Optimized**: Tối ưu hóa để chạy trên CPU, không cần GPU
-- 🎵 **Audio Sync**: Giữ nguyên âm thanh gốc từ video
+- 🎯 Auto Tracking: Tự động phát hiện và theo dõi người được chọn trong video
+- 🤖 Face Recognition: Nhận diện khuôn mặt bằng deep learning
+- 🎨 Color Matching: So sánh màu trang phục để tăng độ chính xác
+- 🔍 Smart Zoom: Tự động zoom và crop theo tỷ lệ 9:16 (vertical video)
+- ⚡ CPU Optimized: Tối ưu hóa để chạy trên CPU, không cần GPU
+- 🎵 Audio Sync: Giữ nguyên âm thanh gốc từ video
 
 ## 🛠️ Yêu cầu hệ thống
 
@@ -20,13 +20,13 @@
 
 ## 📦 Cài đặt
 
-### 1. Clone repository
+1. Clone repository:
 ```bash
 git clone <repository-url>
 cd fancam_cpu
 ```
 
-### 2. Tạo môi trường ảo (khuyến nghị)
+2. Tạo môi trường ảo (khuyến nghị)
 ```bash
 python -m venv venv
 
@@ -37,12 +37,12 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-### 3. Cài đặt dependencies
+3. Cài đặt dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Kiểm tra cài đặt
+4. Kiểm tra cài đặt
 ```bash
 # Test YOLO model
 python test_yolo.py
@@ -118,22 +118,29 @@ fancam_cpu/
 
 ## 🔧 Cấu hình
 
-### Thay đổi model (nếu có GPU)
-Trong [`main.py`](main.py) dòng 28-32:
+### Thay đổi model & cấu hình device
+Trong `main.py` (khoảng dòng 28): cấu hình device và model như sau.
+
+Mặc định (chạy trên CPU):
 
 ```python
-# Sử dụng CPU (mặc định)
-os.environ["CUDA_VISIBLE_DEVICES"] = "" 
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = ""  # force CPU
 DEVICE_STR = "cpu"
 model = YOLO("yolov8n.pt")
-
-# Nếu có GPU, bỏ comment:
-# DEVICE_STR = "0"  # GPU ID
-# model = YOLO("yolov8m.pt")
 ```
 
-### Điều chỉnh tham số tracking
-Trong [`main.py`](main.py) dòng 34-40:
+Nếu muốn chạy trên GPU (khi máy đã cài driver/CUDA tương thích):
+
+```python
+# Cho phép CUDA sử dụng thiết bị GPU mặc định
+os.environ.pop("CUDA_VISIBLE_DEVICES", None)
+DEVICE_STR = "cuda:0"  # hoặc "cuda"
+model = YOLO("yolov8m.pt")  # chọn model lớn hơn nếu GPU có đủ VRAM
+```
+
+### Tham số tracking chính
+Trong `main.py` (khoảng dòng 34):
 
 ```python
 CONFIDENCE_THRESHOLD = 0.3      # Ngưỡng confidence YOLO
@@ -141,6 +148,35 @@ FACE_SIM_THRESHOLD = 0.65       # Ngưỡng tương đồng khuôn mặt
 MAX_CENTER_DISTANCE = 500       # Khoảng cách tối đa giữa frames
 MAX_LOST_FRAMES = 60            # Số frames tối đa mất tracking
 ```
+
+### GPU — cài đặt & kiểm tra
+Để chạy bằng GPU bạn cần:
+
+- Driver NVIDIA phù hợp
+- CUDA toolkit/cuDNN khớp với phiên bản PyTorch bạn cài
+
+Ví dụ cài PyTorch với CUDA 11.8 (Windows, pip):
+
+```bash
+pip install --upgrade pip
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+```
+
+Hoặc dùng lệnh cài đặt chính thức từ https://pytorch.org theo cấu hình hệ thống của bạn.
+
+Kiểm tra GPU từ Python:
+
+```bash
+python -c "import torch; print('cuda available:', torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else '')"
+```
+
+Trong repo có `test_gpu.py` để kiểm tra nhanh GPU — chạy `python test_gpu.py`.
+
+Lưu ý vận hành khi dùng GPU:
+- Theo dõi bộ nhớ GPU (GPU VRAM). Nếu OOM, giảm model (yolov8n) hoặc giảm batch/độ phân giải input.
+- Dùng `torch.cuda.empty_cache()` sau các bước nặng để giải phóng bộ nhớ tạm.
+- Khi bật GPU, chọn model lớn hơn (`yolov8m.pt`) để tận dụng hiệu năng nếu VRAM đủ.
+
 
 ## 🐛 Troubleshooting
 
@@ -193,34 +229,6 @@ Contributions are welcome! Please:
 4. Push to branch
 5. Create Pull Request
 
-## 📝 License
 
-MIT License - Free to use for personal and commercial projects
-
-## 👤 Author
-
-**Fancam AI Team**
-- GitHub: [Your GitHub]
-- Email: [Your Email]
-
-## 🙏 Credits
-
-- [YOLOv8](https://github.com/ultralytics/ultralytics) by Ultralytics
-- [OpenCV](https://opencv.org/)
-- [MoviePy](https://zulko.github.io/moviepy/)
-- [Flask](https://flask.palletsprojects.com/)
-
-## 📸 Screenshots
-
-### Main Interface
-![Main UI](docs/screenshot_main.png)
-
-### Detection Result
-![Detection](docs/screenshot_detection.png)
-
-### Processing
-![Processing](docs/screenshot_processing.png)
-
----
 
 **⭐ If you find this useful, please star the repository!**
