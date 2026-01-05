@@ -302,7 +302,7 @@ def get_color_histogram(frame, box):
     return hist.flatten()
 
 def process_fancam(video_path, target_id_str, ref_face_paths, ref_color_paths, zoom_level):
-    # --- 1. KHỞI TẠO & ĐỊNH NGHĨA PATH (Đã sửa lỗi mất path) ---
+    # --- 1. KHỞI TẠO & ĐỊNH NGHĨA PATH ---
     kalman = cv2.KalmanFilter(4, 2)
     kalman.measurementMatrix = np.array([[1, 0, 0, 0], [0, 1, 0, 0]], np.float32)
     kalman.transitionMatrix = np.array([[1, 0, 1, 0], [0, 1, 0, 1], [0, 0, 1, 0], [0, 0, 0, 1]], np.float32)
